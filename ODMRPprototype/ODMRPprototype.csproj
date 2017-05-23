@@ -58,6 +58,7 @@
     <Compile Include="JoinRequestPacket.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="Packet.cs" />
+    <Compile Include="PacketFactory.cs" />
     <Compile Include="Pair.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
