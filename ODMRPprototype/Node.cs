@@ -8,14 +8,27 @@ namespace ODMRPprototype
 {
     class Node
     {
-        protected int Address;
         public const int VisibilityRange = 20;
+        static int NodeNumbering = 1;
+        protected int Address;
         Queue<Packet> Packets;
         public Coordinates Coordinates { get; private set; }
         List<Node> NodesInRange;
         Queue<int> PreviousPackets;
         List<TableEntry> RoutingTable;
-        protected int SequenceNumber = 0;
+        protected int SequenceNumber;
+
+        public Node(Coordinates coordinates, List<Node> nodesInRange)
+        {
+            Coordinates = coordinates;
+            NodesInRange = nodesInRange;
+
+            Address = NodeNumbering++;
+            Packets = new Queue<Packet>();
+            PreviousPackets = new Queue<int>();
+            RoutingTable = new List<TableEntry>();
+            SequenceNumber = 0;
+        }
 
         public void IncomingData(Packet packet)
         {

@@ -9,7 +9,12 @@ namespace ODMRPprototype
     class Receiver : Node
     {
         string Data;
-        public int SubscribedGroup { get; set; }
+        public int SubscribedGroup { get; }
+
+        public Receiver(Coordinates coordinates, List<Node> nodesInRange, int multicastGroup) : base(coordinates, nodesInRange)
+        {
+            SubscribedGroup = multicastGroup;
+        }
 
         protected override void ProcessDataPacket(DataPacket packet)
         {
