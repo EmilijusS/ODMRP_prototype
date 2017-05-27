@@ -16,24 +16,28 @@ namespace ODMRPprototype
             SubscribedGroup = multicastGroup;
         }
 
-        protected override void ProcessDataPacket(DataPacket packet)
+        protected override List<Packet> ProcessDataPacket(DataPacket packet)
         {
             if (packet.Destination == SubscribedGroup)
                 Data += packet.Data;
+
+            return null;
         }
 
-        protected override void ProcessJoinRequestPacket(JoinRequestPacket packet)
+        protected override List<Packet> ProcessJoinRequestPacket(JoinRequestPacket packet)
         {
-            if(packet.MulticastGroup == SubscribedGroup)
+            if (packet.MulticastGroup == SubscribedGroup)
             {
                 JoinReplyPacket newPacket = new JoinReplyPacket(Address * 10000 + SequenceNumber++, SubscribedGroup, packet.Source, packet.PreviousHop, Address);
-                SendPacket(newPacket);
+                return SendPacket(newPacket);
             }
+            else
+                return null;
         }
 
-        protected override void ProcessJoinReplyPacket(JoinReplyPacket packet)
+        protected override List<Packet> ProcessJoinReplyPacket(JoinReplyPacket packet)
         {
-            return;
+            return null;
         }
     }
 }

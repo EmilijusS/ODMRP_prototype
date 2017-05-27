@@ -13,16 +13,16 @@ namespace ODMRPprototype
         protected int Address;
         Queue<Packet> Packets;
         public Coordinates Coordinates { get; private set; }
-        List<Node> NodesInRange;
+        public List<Node> NodesInRange { get; }
         Queue<int> PreviousPackets;
         List<TableEntry> RoutingTable;
         protected int SequenceNumber;
 
-        public Node(Coordinates coordinates, List<Node> nodesInRange)
+        public Node(Coordinates coordinates)
         {
             Coordinates = coordinates;
-            NodesInRange = nodesInRange;
 
+            NodesInRange = new List<Node>();
             Address = NodeNumbering++;
             Packets = new Queue<Packet>();
             PreviousPackets = new Queue<int>();
@@ -35,15 +35,20 @@ namespace ODMRPprototype
             Packets.Enqueue(packet);
         }
 
-        protected void SendPacket(Packet packet)
+        protected List<Packet> SendPacket(Packet packet)
         {
+            List<Packet> sentPackets = new List<Packet>();
+
             foreach(var n in NodesInRange)
             {
                 Packet newPacket = PacketFactory.Clone(packet);
                 newPacket.Target = n;
                 newPacket.InitialCoordinates = Coordinates;
                 newPacket.InitialTimeToTarget = (GetDistance(Coordinates, n.Coordinates) / Packet.Speed) + 1;
+                sentPackets.Add(newPacket);
             }
+
+            return sentPackets;
         }
 
         int GetDistance(Coordinates first, Coordinates second)
@@ -51,9 +56,11 @@ namespace ODMRPprototype
             return (int)Math.Sqrt(Math.Pow((first.X - second.X), 2) + Math.Pow((first.Y - second.Y), 2));
         }
 
-        public virtual void Update()
+        public virtual List<Packet> Update()
         {
-            foreach(var e in RoutingTable)
+            List<Packet> sentPackets = new List<Packet>();
+
+            foreach (var e in RoutingTable)
             {
                 e.Update();
             }
@@ -62,14 +69,18 @@ namespace ODMRPprototype
             {
                 if(!PreviousPackets.Contains(p.SequenceNumber))
                 {
+                    List<Packet> newSentPackets = null;
                     PreviousPackets.Enqueue(p.SequenceNumber);
 
                     if (p is DataPacket)
-                        ProcessDataPacket((DataPacket)p);
-                    if (p is JoinRequestPacket)
-                        ProcessJoinRequestPacket((JoinRequestPacket)p);
-                    if (p is JoinReplyPacket)
-                        ProcessJoinReplyPacket((JoinReplyPacket)p);
+                        newSentPackets = ProcessDataPacket((DataPacket)p);
+                    else if (p is JoinRequestPacket)
+                        newSentPackets = ProcessJoinRequestPacket((JoinRequestPacket)p);
+                    else if (p is JoinReplyPacket)
+                        newSentPackets = ProcessJoinReplyPacket((JoinReplyPacket)p);
+
+                    if (newSentPackets != null)
+                        sentPackets.AddRange(newSentPackets);
                 }              
             }
 
@@ -79,17 +90,21 @@ namespace ODMRPprototype
             {
                 PreviousPackets.Dequeue();
             }
+
+            return sentPackets;
         }
 
-        protected virtual void ProcessDataPacket(DataPacket packet)
+        protected virtual List<Packet> ProcessDataPacket(DataPacket packet)
         {
-            if((bool)RoutingTable.Find(x => x.MulticastGroup == packet.Destination)?.ForwardingGroup)
+            if ((bool)RoutingTable.Find(x => x.MulticastGroup == packet.Destination)?.ForwardingGroup)
             {
-                SendPacket(packet);
-            }            
+                return SendPacket(packet);
+            }
+            else
+                return null;            
         }
 
-        protected virtual void ProcessJoinRequestPacket(JoinRequestPacket packet)
+        protected virtual List<Packet> ProcessJoinRequestPacket(JoinRequestPacket packet)
         {
             var entry = RoutingTable.Find(x => x.MulticastGroup == packet.MulticastGroup);
 
@@ -102,19 +117,23 @@ namespace ODMRPprototype
             packet.PreviousHop = Address;
 
             if (--packet.TimeToLive > 0)
-            {
-                SendPacket(packet);
-            }
+                return SendPacket(packet);
+            else
+                return null;
         }
 
-        protected virtual void ProcessJoinReplyPacket(JoinReplyPacket packet)
+        protected virtual List<Packet> ProcessJoinReplyPacket(JoinReplyPacket packet)
         {
             if(packet.NextHop == Address)
             {
                 RoutingTable.Find(x => x.MulticastGroup == packet.MulticastGroup).ResetExpiration();
                 packet.PreviousHop = Address;
                 packet.NextHop = RoutingTable.Find(x => x.MulticastGroup == packet.MulticastGroup).NextHop;
-                SendPacket(packet);
+                return SendPacket(packet);
+            }
+            else
+            {
+                return null;
             }
         }
     }

@@ -15,42 +15,44 @@ namespace ODMRPprototype
         int JoinRequestTimer;
         int DataTimer;
         int Data = 0;
-        int MulticastGroup;
+        public int MulticastGroup { get; }
 
         public Source(Coordinates coordinates, List<Node> nodesInRange) : base(coordinates, nodesInRange)
         {
             MulticastGroup = MulticastGroupNumbering++;
         }
 
-        public override void Update()
+        public override List<Packet> Update()
         {
             base.Update();
 
             if(--JoinRequestTimer == 0)
             {
-                SendPacket(new JoinRequestPacket(Address * 10000 + SequenceNumber++, MulticastGroup, Address, Address, JoinRequestTimeToLive));
                 JoinRequestTimer = JoinRequestInterval;
+                return SendPacket(new JoinRequestPacket(Address * 10000 + SequenceNumber++, MulticastGroup, Address, Address, JoinRequestTimeToLive));   
             }
             else if(--DataTimer == 0)
             {
-                SendPacket(new DataPacket(Address * 10000 + SequenceNumber++, MulticastGroup, Address, Convert.ToString(Data++ % 10)));
                 DataTimer = DataInterval;
+                return SendPacket(new DataPacket(Address * 10000 + SequenceNumber++, MulticastGroup, Address, Convert.ToString(Data++ % 10)));    
             }
+
+            return new List<Packet>();
         }
 
-        protected override void ProcessDataPacket(DataPacket packet)
+        protected override List<Packet> ProcessDataPacket(DataPacket packet)
         {
-            return;
+            return null;
         }
 
-        protected override void ProcessJoinRequestPacket(JoinRequestPacket packet)
+        protected override List<Packet> ProcessJoinRequestPacket(JoinRequestPacket packet)
         {
-            return;
+            return null;
         }
 
-        protected override void ProcessJoinReplyPacket(JoinReplyPacket packet)
+        protected override List<Packet> ProcessJoinReplyPacket(JoinReplyPacket packet)
         {
-            return;
+            return null;
         }
     }
 }
