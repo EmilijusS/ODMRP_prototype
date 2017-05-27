@@ -22,9 +22,9 @@ namespace ODMRPprototype
             Packets = new List<Packet>();
             MulticastGroups = new List<int>();
 
-            Nodes.Add(new Source(new Coordinates(0, 0), new List<Node>()));
+            Nodes.Add(new Source(new Coordinates(0, 0)));
             MulticastGroups.Add(((Source)Nodes[0]).MulticastGroup);
-            Nodes.Add(new Receiver(new Coordinates(100, 100), new List<Node>(), MulticastGroups[0]));
+            Nodes.Add(new Receiver(new Coordinates(100, 100), MulticastGroups[0]));
             AddInitialNodes();
         }
 
@@ -70,19 +70,26 @@ namespace ODMRPprototype
 
         public void Update()
         {
-            foreach(var p in Packets)
+            foreach(var n in Nodes)
+            {
+                Packets.AddRange(n.Update());
+            }
+
+            List<Packet> toRemove = new List<Packet>();
+;
+            foreach (var p in Packets)
             {
                 p.UpdatePosition();
                 if (p.TimeToTarget == 0)
                 {
                     p.Target.IncomingData(p);
-                    Packets.Remove(p);
+                    toRemove.Add(p);
                 }
             }
 
-            foreach(var n in Nodes)
+            foreach(var p in toRemove)
             {
-                Packets.AddRange(n.Update());
+                Packets.Remove(p);
             }
         }
     }

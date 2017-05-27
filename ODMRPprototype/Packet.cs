@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ODMRPprototype
 {
-    class Packet
+     public class Packet
     {
-        public const int Speed = 5;
+        public const int Speed = 2;
 
         public int InitialTimeToTarget
         {
@@ -18,7 +18,7 @@ namespace ODMRPprototype
             }
             set
             {
-                InitialTimeToTarget = value;
+                initialTimeToTarget = value;
                 TimeToTarget = value;
             }
         }
@@ -31,7 +31,7 @@ namespace ODMRPprototype
             }
             set
             {
-                InitialCoordinates = value;
+                initialCoordinates = value;
                 Coordinates = value;
             }
         }
@@ -39,7 +39,7 @@ namespace ODMRPprototype
         int initialTimeToTarget;
         public int TimeToTarget { get; private set; }    
         Coordinates initialCoordinates;
-        Coordinates Coordinates;
+        public Coordinates Coordinates { get; private set; }
         public Node Target { get; set; }
         public int SequenceNumber { get; set; }
 

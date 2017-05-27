@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ODMRPprototype
 {
-    class DataPacket : Packet
+    public class DataPacket : Packet
     {
         public int Destination { get; set; }
         public int Sender { get; set; }

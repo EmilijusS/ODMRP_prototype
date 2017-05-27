@@ -8,7 +8,7 @@ namespace ODMRPprototype
 {
     class TableEntry
     {
-        public const int StartExpiration = 20;
+        public const int StartExpiration = 50;
         public int MulticastGroup { get; set; }
         public int NextHop { get; set; }
         public int Expiration { get; set; }

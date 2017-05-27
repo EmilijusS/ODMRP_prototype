@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ODMRPprototype
 {
-    class JoinReplyPacket : Packet
+    public class JoinReplyPacket : Packet
     {
         public int MulticastGroup { get;}
         public int Source { get;}

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ODMRPprototype
 {
-    struct Coordinates
+    public struct Coordinates
     {
         public int X { get; }
         public int Y { get; }

@@ -11,7 +11,7 @@ namespace ODMRPprototype
         string Data;
         public int SubscribedGroup { get; }
 
-        public Receiver(Coordinates coordinates, List<Node> nodesInRange, int multicastGroup) : base(coordinates, nodesInRange)
+        public Receiver(Coordinates coordinates, int multicastGroup) : base(coordinates)
         {
             SubscribedGroup = multicastGroup;
         }

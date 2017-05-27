@@ -8,8 +8,8 @@ namespace ODMRPprototype
 {
     class Source : Node
     {
-        const int JoinRequestInterval = 10;
-        const int DataInterval = 3;
+        const int JoinRequestInterval = 30;
+        const int DataInterval = 10;
         const int JoinRequestTimeToLive = 20;
         static int MulticastGroupNumbering = 1000;
         int JoinRequestTimer;
@@ -17,9 +17,11 @@ namespace ODMRPprototype
         int Data = 0;
         public int MulticastGroup { get; }
 
-        public Source(Coordinates coordinates, List<Node> nodesInRange) : base(coordinates, nodesInRange)
+        public Source(Coordinates coordinates) : base(coordinates)
         {
             MulticastGroup = MulticastGroupNumbering++;
+            JoinRequestTimer = 1;
+            DataTimer = DataInterval;
         }
 
         public override List<Packet> Update()

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace ODMRPprototype
 {
-    class Node
+    public class Node
     {
-        public const int VisibilityRange = 20;
+        public const int VisibilityRange = 30;
         static int NodeNumbering = 1;
-        protected int Address;
+        public int Address { get; set; }
         Queue<Packet> Packets;
         public Coordinates Coordinates { get; private set; }
         public List<Node> NodesInRange { get; }
