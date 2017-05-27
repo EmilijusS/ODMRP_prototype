@@ -15,7 +15,7 @@ namespace ODMRPprototype
         List<Node> NodesInRange;
         Queue<int> PreviousPackets;
         List<TableEntry> RoutingTable;
-        protected int sequenceNumber = 0;
+        protected int SequenceNumber = 0;
 
         public void IncomingData(Packet packet)
         {
@@ -38,7 +38,7 @@ namespace ODMRPprototype
             return (int)Math.Sqrt(Math.Pow((first.X - second.X), 2) + Math.Pow((first.Y - second.Y), 2));
         }
 
-        public void Update()
+        public virtual void Update()
         {
             foreach(var e in RoutingTable)
             {

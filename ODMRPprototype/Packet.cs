@@ -42,6 +42,7 @@ namespace ODMRPprototype
         Coordinates Coordinates;
         public Node Target { get; set; }
         public int SequenceNumber { get; set; }
+        public bool IsTravelling { get; set; }
 
         public Packet(int sequenceNumber)
         {

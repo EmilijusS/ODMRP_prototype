@@ -21,7 +21,7 @@ namespace ODMRPprototype
         {
             if(packet.MulticastGroup == SubscribedGroup)
             {
-                JoinReplyPacket newPacket = new JoinReplyPacket(Address * 10000 + sequenceNumber, SubscribedGroup, packet.Source, packet.PreviousHop, Address);
+                JoinReplyPacket newPacket = new JoinReplyPacket(Address * 10000 + SequenceNumber++, SubscribedGroup, packet.Source, packet.PreviousHop, Address);
                 SendPacket(newPacket);
             }
         }
