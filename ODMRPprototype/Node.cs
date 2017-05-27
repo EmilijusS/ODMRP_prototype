@@ -14,6 +14,7 @@ namespace ODMRPprototype
         public Coordinates Coordinates { get; private set; }
         List<Node> NodesInRange;
         Queue<int> PreviousPackets;
+        List<TableEntry> RoutingTable;
 
         public void IncomingData(Packet packet)
         {
@@ -36,8 +37,13 @@ namespace ODMRPprototype
             return (int)Math.Sqrt(Math.Pow((first.X - second.X), 2) + Math.Pow((first.Y - second.Y), 2));
         }
 
-        void ProcessPackets()
+        void Update()
         {
+            foreach(var e in RoutingTable)
+            {
+                e.Update();
+            }
+
             foreach(var p in Packets)
             {
                 if(!PreviousPackets.Contains(p.SequenceNumber))
@@ -55,7 +61,7 @@ namespace ODMRPprototype
 
             Packets.Clear();
 
-            while(PreviousPackets.Count > 100)
+            while(PreviousPackets.Count > 1000)
             {
                 PreviousPackets.Dequeue();
             }
@@ -63,15 +69,38 @@ namespace ODMRPprototype
 
         protected virtual void ProcessDataPacket(DataPacket packet)
         {
-            SendPacket(packet);
+            if((bool)RoutingTable.Find(x => x.MulticastGroup == packet.Destination)?.ForwardingGroup)
+            {
+                SendPacket(packet);
+            }            
         }
 
         protected virtual void ProcessJoinRequestPacket(JoinRequestPacket packet)
         {
-            if(--packet.TimeToLive > 0)
+            var entry = RoutingTable.Find(x => x.MulticastGroup == packet.MulticastGroup);
+
+            if (entry == null)
+                RoutingTable.Add(new TableEntry(packet.MulticastGroup, packet.PreviousHop));
+            else
+                entry.NextHop = packet.PreviousHop;
+
+            ++packet.HopCount;
+            packet.PreviousHop = Address;
+
+            if (--packet.TimeToLive > 0)
             {
-                ++packet.HopCount;
+                SendPacket(packet);
+            }
+        }
+
+        protected virtual void ProcessJoinReplyPacket(JoinReplyPacket packet)
+        {
+            if(packet.NextHop == Address)
+            {
+                RoutingTable.Find(x => x.MulticastGroup == packet.MulticastGroup).ResetExpiration();
                 packet.PreviousHop = Address;
+                packet.NextHop = RoutingTable.Find(x => x.MulticastGroup == packet.MulticastGroup).NextHop;
+                SendPacket(packet);
             }
         }
     }
