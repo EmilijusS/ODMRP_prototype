@@ -38,7 +38,34 @@ namespace ODMRPprototype
 
         void AddNode(Node node)
         {
+            foreach(var n in Nodes)
+            {
+                if(GetDistance(n.Coordinates, node.Coordinates) <= Node.VisibilityRange)
+                {
+                    n.NodesInRange.Add(node);
+                    node.NodesInRange.Add(n);
+                }
+            }
 
+            Nodes.Add(node);
+        }
+
+        void ChangedNode(Node node)
+        {
+            foreach(var n in Nodes)
+            {
+                n.NodesInRange.Remove(node);
+            }
+
+            Nodes.Remove(node);
+            node.NodesInRange.Clear();
+
+            AddNode(node);
+        }
+
+        int GetDistance(Coordinates first, Coordinates second)
+        {
+            return (int)Math.Sqrt(Math.Pow((first.X - second.X), 2) + Math.Pow((first.Y - second.Y), 2));
         }
 
         public void Update()
