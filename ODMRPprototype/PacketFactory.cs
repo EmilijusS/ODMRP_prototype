@@ -24,17 +24,17 @@ namespace ODMRPprototype
 
         static DataPacket CloneDataPacket(DataPacket packet)
         {
-            return null;
+            return new DataPacket(packet.SequenceNumber, packet.Destination, packet.Sender, packet.Data);
         }
 
         static JoinRequestPacket CloneJoinRequestPacket(JoinRequestPacket packet)
         {
-            return null;
+            return new JoinRequestPacket(packet.SequenceNumber, packet.MulticastGroup, packet.Source, packet.PreviousHop, packet.TimeToLive, packet.HopCount);
         }
 
-        static JoinRequestPacket CloneJoinReplyPacket(JoinReplyPacket packet)
+        static JoinReplyPacket CloneJoinReplyPacket(JoinReplyPacket packet)
         {
-            return null;
+            return new JoinReplyPacket(packet.SequenceNumber, packet.MulticastGroup, packet.Source, packet.NextHop, packet.PreviousHop);
         }
     }
 }

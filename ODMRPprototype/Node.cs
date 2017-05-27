@@ -8,20 +8,21 @@ namespace ODMRPprototype
 {
     class Node
     {
-        int Address;
+        protected int Address;
         public const int VisibilityRange = 20;
         Queue<Packet> Packets;
         public Coordinates Coordinates { get; private set; }
         List<Node> NodesInRange;
         Queue<int> PreviousPackets;
         List<TableEntry> RoutingTable;
+        protected int sequenceNumber = 0;
 
         public void IncomingData(Packet packet)
         {
             Packets.Enqueue(packet);
         }
 
-        void SendPacket(Packet packet)
+        protected void SendPacket(Packet packet)
         {
             foreach(var n in NodesInRange)
             {
@@ -37,7 +38,7 @@ namespace ODMRPprototype
             return (int)Math.Sqrt(Math.Pow((first.X - second.X), 2) + Math.Pow((first.Y - second.Y), 2));
         }
 
-        void Update()
+        public void Update()
         {
             foreach(var e in RoutingTable)
             {

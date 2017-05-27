@@ -15,13 +15,13 @@ namespace ODMRPprototype
         public int TimeToLive { get; set; }
         public int HopCount { get; set; }
 
-        public JoinRequestPacket(int sequenceNumber, int multicastGroup, int source, int previousHop, int timeToLive) : base(sequenceNumber)
+        public JoinRequestPacket(int sequenceNumber, int multicastGroup, int source, int previousHop, int timeToLive, int hopCount = 0) : base(sequenceNumber)
         {
             MulticastGroup = multicastGroup;
             Source = source;
             PreviousHop = previousHop;
             TimeToLive = timeToLive;
-            HopCount = 0;
+            HopCount = hopCount;
         }
     }
 }

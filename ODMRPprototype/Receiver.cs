@@ -6,7 +6,29 @@ using System.Threading.Tasks;
 
 namespace ODMRPprototype
 {
-    class Receiver
+    class Receiver : Node
     {
+        string Data;
+        public int SubscribedGroup { get; set; }
+
+        protected override void ProcessDataPacket(DataPacket packet)
+        {
+            if (packet.Destination == SubscribedGroup)
+                Data += packet.Data;
+        }
+
+        protected override void ProcessJoinRequestPacket(JoinRequestPacket packet)
+        {
+            if(packet.MulticastGroup == SubscribedGroup)
+            {
+                JoinReplyPacket newPacket = new JoinReplyPacket(Address * 10000 + sequenceNumber, SubscribedGroup, packet.Source, packet.PreviousHop, Address);
+                SendPacket(newPacket);
+            }
+        }
+
+        protected override void ProcessJoinReplyPacket(JoinReplyPacket packet)
+        {
+            return;
+        }
     }
 }

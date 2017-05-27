@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ODMRPprototype
 {
-    class Source
+    class Source : Node
     {
     }
 }
