@@ -9,11 +9,19 @@ namespace ODMRPprototype
 {
     class JoinRequestPacket : Packet
     {
-        int TimeToLive;
-        int HopCount;
-        IPAddress MulticastGroup;
-        int SequenceNumber;
-        IPAddress Source;
-        IPAddress PreviousHop;
+        public int MulticastGroup { get; set; }
+        public int Source { get; set; }
+        public int PreviousHop { get; set; }
+        public int TimeToLive { get; set; }
+        public int HopCount { get; set; }
+
+        public JoinRequestPacket(int sequenceNumber, int multicastGroup, int source, int previousHop, int timeToLive) : base(sequenceNumber)
+        {
+            MulticastGroup = multicastGroup;
+            Source = source;
+            PreviousHop = previousHop;
+            TimeToLive = timeToLive;
+            HopCount = 0;
+        }
     }
 }

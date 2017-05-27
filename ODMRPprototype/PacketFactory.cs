@@ -8,7 +8,7 @@ namespace ODMRPprototype
 {
     class PacketFactory
     {
-        public Packet Clone(Packet packet)
+        public static Packet Clone(Packet packet)
         {
             if (packet is DataPacket)
                 return CloneDataPacket((DataPacket)packet);
@@ -22,17 +22,17 @@ namespace ODMRPprototype
             throw new ArgumentException();
         }
 
-        DataPacket CloneDataPacket(DataPacket packet)
+        static DataPacket CloneDataPacket(DataPacket packet)
         {
             return null;
         }
 
-        JoinRequestPacket CloneJoinRequestPacket(JoinRequestPacket packet)
+        static JoinRequestPacket CloneJoinRequestPacket(JoinRequestPacket packet)
         {
             return null;
         }
 
-        JoinRequestPacket CloneJoinReplyPacket(JoinReplyPacket packet)
+        static JoinRequestPacket CloneJoinReplyPacket(JoinReplyPacket packet)
         {
             return null;
         }

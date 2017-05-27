@@ -9,9 +9,15 @@ namespace ODMRPprototype
 {
     class JoinReplyPacket : Packet
     {
-        IPAddress MulticastGroup;
-        int SequenceNumber;
-        IPAddress Source;
-        IPAddress NextHop;
+        public int MulticastGroup { get;}
+        public int Source { get;}
+        public int NextHop { get; set; }
+
+        public JoinReplyPacket(int sequenceNumber, int multicastGroup, int source, int nextHop) : base(sequenceNumber)
+        {
+            MulticastGroup = multicastGroup;
+            Source = source;
+            NextHop = nextHop;
+        }
     }
 }
