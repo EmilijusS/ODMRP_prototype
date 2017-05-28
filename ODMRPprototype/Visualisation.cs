@@ -42,7 +42,7 @@ namespace ODMRPprototype
                         brush.Color = Color.Red;
 
                     if (n is Receiver)
-                        brush.Color = Color.LightBlue;
+                        brush.Color = Color.Aqua;
 
                     g.FillRectangle(brush, new Rectangle(n.Coordinates.X * _Scale + XOffset, n.Coordinates.Y * _Scale + YOffset, _Scale, _Scale));
                     g.DrawString(n.Address.ToString(), new Font("Arial", 12), brush, n.Coordinates.X * _Scale + XOffset + _Scale, n.Coordinates.Y * _Scale + YOffset + _Scale);
@@ -60,7 +60,7 @@ namespace ODMRPprototype
                         brush.Color = Color.Red;
 
                     if (p is JoinReplyPacket)
-                        brush.Color = Color.LightBlue;
+                        brush.Color = Color.Aqua;
 
                     g.FillRectangle(brush, new Rectangle(p.Coordinates.X * _Scale + XOffset - 2 + random.Next(5), p.Coordinates.Y * _Scale + YOffset - 2 + random.Next(5), 3, 3));
                 }

@@ -24,8 +24,16 @@ namespace ODMRPprototype
             visualisation.Update();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void AddNodeButton_Click(object sender, EventArgs e)
         {
+            new AddNode(simulation).Show();
+        }
+
+        private void NextStepButton_Click(object sender, EventArgs e)
+        {
+            DataSentBox.Text = ((Source)simulation.Nodes[0]).DataSent;
+            DataReceivedBox.Text = ((Receiver)simulation.Nodes[1]).Data;
+
             simulation.Update();
             visualisation.Refresh();
             Console.WriteLine(simulation.Packets.Count);

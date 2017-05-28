@@ -96,12 +96,13 @@ namespace ODMRPprototype
 
         protected virtual List<Packet> ProcessDataPacket(DataPacket packet)
         {
-            if ((bool)RoutingTable.Find(x => x.MulticastGroup == packet.Destination)?.ForwardingGroup)
-            {
-                return SendPacket(packet);
-            }
-            else
-                return null;            
+            TableEntry entry = RoutingTable.Find(x => x.MulticastGroup == packet.Destination);
+
+            if(entry != null)
+                if(entry.ForwardingGroup)
+                    return SendPacket(packet);
+
+            return null;          
         }
 
         protected virtual List<Packet> ProcessJoinRequestPacket(JoinRequestPacket packet)

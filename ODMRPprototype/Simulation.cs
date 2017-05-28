@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ODMRPprototype
 {
-    class Simulation
+    public class Simulation
     {
         private Coordinates[] InitialNodes = {new Coordinates(5, 10), new Coordinates(17, 8), new Coordinates(20, 2), new Coordinates(27, 30)
         , new Coordinates(40, 31), new Coordinates(50, 12), new Coordinates(22, 78), new Coordinates(69, 35), new Coordinates(80, 67), new Coordinates(95, 41)
@@ -36,7 +36,7 @@ namespace ODMRPprototype
             }
         }
 
-        void AddNode(Node node)
+        public void AddNode(Node node)
         {
             foreach(var n in Nodes)
             {

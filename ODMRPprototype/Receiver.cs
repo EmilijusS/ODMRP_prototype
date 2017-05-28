@@ -8,7 +8,7 @@ namespace ODMRPprototype
 {
     class Receiver : Node
     {
-        string Data;
+        public string Data { get; private set; }
         public int SubscribedGroup { get; }
 
         public Receiver(Coordinates coordinates, int multicastGroup) : base(coordinates)

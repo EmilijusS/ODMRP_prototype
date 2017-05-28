@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ODMRPprototype
 {
-    class Source : Node
+    public class Source : Node
     {
         const int JoinRequestInterval = 30;
         const int DataInterval = 10;
@@ -16,6 +16,7 @@ namespace ODMRPprototype
         int DataTimer;
         int Data = 0;
         public int MulticastGroup { get; }
+        public string DataSent { get; private set; }
 
         public Source(Coordinates coordinates) : base(coordinates)
         {
@@ -36,6 +37,7 @@ namespace ODMRPprototype
             else if(--DataTimer == 0)
             {
                 DataTimer = DataInterval;
+                DataSent += Convert.ToString(Data % 10);
                 return SendPacket(new DataPacket(Address * 10000 + SequenceNumber++, MulticastGroup, Address, Convert.ToString(Data++ % 10)));    
             }
 
